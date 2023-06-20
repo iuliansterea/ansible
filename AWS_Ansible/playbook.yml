@@ -1,82 +1,27 @@
-# AWS playbook
-
-
-- hosts: localhost
-  connection: local
+---
+- name: Create EC2 instance
+  hosts: localhost
   gather_facts: False
-
   vars:
-    key_name: my_aws
-    region: us-east-1
-    image: ami-0f93b5fd8f220e428 # https://cloud-images.ubuntu.com/locator/ec2/
-    id: "web-app"
-    sec_group: "{{ id }}-sec"
-    ec2_access_key: "AKIAQEHZAVZBUIPP72GL"
-    ec2_secret_key: "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"
-
+    region: "us-east-1"
+    instance_type: "t2.micro"
+    ami_id: "ami-04132f301c3e4f138"  # Specify the AMI ID for the desired Amazon Machine Image
+    key_pair: "kptest"  # Specify the name of your key pair
+    security_group: "vpc-09b904307a5fdd1c6"  # Specify the name of your security group
   tasks:
+    - name: Launch EC2 instance
+      ec2:
+        region: "{{ region }}"
+        key_name: "{{ key_pair }}"
+        instance_type: "{{ instance_type }}"
+        image_id: "{{ ami_id }}"
+        group: "{{ security_group }}"
+        count: 1
+        wait: true
+        instance_tags:
+          Name: "My EC2 Instance"
+      register: ec2_instance
 
-    - name: Facts
-      block:
-
-      - name: Get instances facts
-        amazon.aws.ec2_metadata_facts:
-          aws_access_key: "{{ ec2_access_key }}"
-          aws_secret_key: "{{ ec2_secret_key }}"
-          region: "{{ region }}"
-        register: result
-
-      - name: Instances ID
-        debug:
-          msg: "ID: {{ item.instance_id }} - State: {{ item.state.name }} - Public DNS: {{ item.public_dns_name }}"
-        loop: "{{ result.instances }}"
-
-      tags: always
-
-
-    - name: Provisioning EC2 instances
-      block:
-
-      - name: Upload public key to AWS
-        amazon.aws.ec2_key:
-          name: "{{ key_name }}"
-          key_material: "{{ lookup('file', '/home/iulian/.ssh/{{ key_name }}.pub') }}"
-          region: "{{ region }}"
-          aws_access_key: "{{ ec2_access_key }}"
-          aws_secret_key: "{{ ec2_secret_key }}"
-
-      - name: Create security group
-        amazon.aws.ec2_security_group:
-          name: "{{ sec_group }}"
-          description: "Sec group for app {{ id }}"
-          # vpc_id: 12345
-          region: "{{ region }}"
-          aws_access_key: "{{ec2_access_key}}"
-          aws_secret_key: "{{ec2_secret_key}}"
-          rules:
-            - proto: tcp
-              ports:
-                - 22
-              cidr_ip: 0.0.0.0/0
-              rule_desc: allow all on ssh port
-        register: result_sec_group
-
-      - name: Provision instance(s)
-        amazon.aws.ec2_instance:
-          aws_access_key: "{{ec2_access_key}}"
-          aws_secret_key: "{{ec2_secret_key}}"
-          key_name: "{{ key_name }}"
-          id: "{{ id }}"
-          group_id: "{{ result_sec_group.group_id }}"
-          image: "{{ image }}"
-          instance_type: t2.micro
-          region: "{{ region }}"
-          wait: true
-          count: 1
-          # exact_count: 2
-          # count_tag:
-          #   Name: App
-          # instance_tags:
-          #   Name: App
-
-      tags: ['never', 'create_ec2']
+    - name: Show instance details
+      debug:
+        var: ec2_instance.instances[0]
