@@ -20,7 +20,7 @@
         security_groups: "{{ security_group }}"
         count: 1
         wait: true
-        instance_tags:
+        tags:
           Name: "My EC2 Instance"
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
