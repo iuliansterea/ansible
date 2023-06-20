@@ -9,8 +9,8 @@
     ami_id: "ami-04132f301c3e4f138"  # Specify the AMI ID for the desired Amazon Machine Image
     key_pair: "kptest"  # Specify the name of your key pair
     security_group: "default"  # Specify the name of your security group
-    aws_access_key: "AKIAQEHZAVZBUIPP72GL"
-    aws_secret_key: "d6G0sJLpFYGrLD7yusg10iCjSamFsR3"
+    aws_access_key: "AKIA3RDFCLN774DNPLPJ"
+    aws_secret_key: "eW4vgQrW32VHKdH6MZ81T1DktbN6QtNAYS1D/krs"
   tasks:
     - name: Launch EC2 instance
       ec2_instance:
