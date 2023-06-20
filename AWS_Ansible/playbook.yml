@@ -11,6 +11,8 @@
     image: ami-0f93b5fd8f220e428 # https://cloud-images.ubuntu.com/locator/ec2/
     id: "web-app"
     sec_group: "{{ id }}-sec"
+    ec2_access_key: "AKIAQEHZAVZBUIPP72GL"
+    ec2_secret_key: "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"
 
   tasks:
 
