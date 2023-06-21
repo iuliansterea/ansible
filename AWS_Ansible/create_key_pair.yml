@@ -28,7 +28,7 @@
       openssl_privatekey:
         path: "{{ key_path }}.pem"
         decrypt: yes
-        passphrase: "{{ private_key_password }}"
+        # passphrase: "{{ private_key_password }}"
         dest: "{{ key_path }}_decrypted.pem"
 
     - name: Display Key Pair
