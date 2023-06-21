@@ -1,0 +1,22 @@
+---
+- name: Create AWS Key Pair
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    aws_access_key: "your_aws_access_key"
+    aws_secret_key: "your_aws_secret_key"
+    key_name: my_key
+
+  tasks:
+    - name: Create Key Pair
+      ec2_key:
+        name: "{{ key_name }}"
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+      register: key_pair
+
+    - name: Display Key Pair
+      debug:
+        var: key_pair
+
