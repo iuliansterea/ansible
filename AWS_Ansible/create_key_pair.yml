@@ -20,7 +20,7 @@
 
     - name: Save Private Key
       copy:
-        content: "{{ key_pair.key.private_key | b64decode }}"
+        content: "{{ key_pair.key.private_key | to_bytes | b64decode }}"
         dest: "{{ key_path }}.pem"
         mode: 0400
 
