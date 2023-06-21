@@ -5,8 +5,8 @@
   vars_files:
     - vars.yml
   vars:
-    key_name: kptest
-    key_path: "./kptest"
+    key_name: kptest1
+    key_path: "kptest1"
 
   tasks:
     - name: Create Key Pair
