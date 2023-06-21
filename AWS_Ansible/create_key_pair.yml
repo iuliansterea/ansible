@@ -2,10 +2,9 @@
 - name: Create AWS Key Pair
   hosts: localhost
   gather_facts: false
-
+    vars_files:
+    - vars.yml
   vars:
-    aws_access_key: "your_aws_access_key"
-    aws_secret_key: "your_aws_secret_key"
     key_name: my_key
 
   tasks:
