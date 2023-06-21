@@ -5,7 +5,7 @@
   vars_files:
     - vars.yml
   vars:
-    key_name: my_key
+    key_name: kptest
 
   tasks:
     - name: Create Key Pair
