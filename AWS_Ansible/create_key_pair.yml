@@ -6,6 +6,7 @@
     - vars.yml
   vars:
     key_name: kptest
+    key_path: "./kptest"
 
   tasks:
     - name: Create Key Pair
@@ -16,7 +17,19 @@
         region: "{{ region }}"
       register: key_pair
 
+    - name: Save Private Key
+      copy:
+        content: "{{ key_pair.key.private_key | b64decode }}"
+        dest: "{{ key_path }}.pem"
+        mode: 0400
+
+    - name: Decrypt Private Key
+      openssl_privatekey:
+        path: "{{ key_path }}.pem"
+        decrypt: yes
+        passphrase: "{{ private_key_password }}"
+        dest: "{{ key_path }}_decrypted.pem"
+
     - name: Display Key Pair
       debug:
         var: key_pair
-
