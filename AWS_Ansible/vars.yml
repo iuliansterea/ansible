@@ -4,3 +4,5 @@
 
   aws_access_key: "AKIA6L2PKLUCQS5ZDLM6"
   aws_secret_key: "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"
+
+  region: "us-east-1"
